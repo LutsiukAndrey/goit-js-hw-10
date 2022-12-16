@@ -1,4 +1,4 @@
-import { createMurkup, createMurkupMin } from './css/create';
+import { createMurkup, createMurkupMin } from './create';
 import './css/styles.css';
 import debounce from 'lodash.debounce';
 import { get } from 'lodash';
