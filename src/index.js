@@ -1,7 +1,7 @@
 import { createMurkup, createMurkupMin } from './create';
 import './css/styles.css';
 import debounce from 'lodash.debounce';
-import { get } from 'lodash';
+
 import Notiflix from 'notiflix';
 const { Notify } = Notiflix;
 const countryInfo = document.querySelector('.country-info');
@@ -24,14 +24,10 @@ const onInput = event => {
 
   fetch(`https://restcountries.com/v3.1/name/${country}`)
     .then(response => {
-      if (response.status === 404 && target.value !== '') {
-        Notify.failure('Oops, there is no country with that name');
-        removeFunc();
-        return;
-      }
       if (!response.ok) {
         throw new Error(response.status);
       }
+
       return response.json();
     })
     .then(data => {
@@ -39,10 +35,10 @@ const onInput = event => {
         Notify.info(
           'Too many matches found. Please enter a more specific name.'
         );
+        removeFunc();
         return;
       }
       if (data.length <= 10) {
-        console.log(data);
         const previue = createMurkupMin(data);
         countryInfo.innerHTML = '';
         countryList.innerHTML = previue;
@@ -56,8 +52,9 @@ const onInput = event => {
       // Data handling
     })
     .catch(error => {
+      Notify.failure('Oops, there is no country with that name');
       // Error handling
-      console.log(error);
+      removeFunc();
     });
 };
 
